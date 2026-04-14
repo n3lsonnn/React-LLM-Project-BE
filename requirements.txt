@@ -4,3 +4,7 @@ sqlalchemy
 alembic
 psycopg2-binary
 pydantic-settings
+pydantic[email]
+bcrypt
+python-jose[cryptography]
+python-multipart
