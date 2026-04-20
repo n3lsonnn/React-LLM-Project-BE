@@ -8,3 +8,9 @@ pydantic[email]
 bcrypt
 python-jose[cryptography]
 python-multipart
+pypdf
+sentence-transformers
+faiss-cpu
+numpy
+aiofiles
+groq
