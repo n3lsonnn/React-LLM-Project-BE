@@ -58,6 +58,26 @@ def list_documents(
     return db.query(Document).filter(Document.user_id == current_user.id).order_by(Document.created_at.desc()).all()
 
 
+@router.get("/{document_uuid}", response_model=DocumentResponse)
+def get_document(
+    document_uuid: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    doc = db.query(Document).filter(
+        Document.uuid == document_uuid,
+        Document.user_id == current_user.id,
+    ).first()
+
+    if not doc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document not found",
+        )
+
+    return doc
+
+
 @router.get("/{document_uuid}/status", response_model=DocumentStatusResponse)
 def get_document_status(
     document_uuid: str,

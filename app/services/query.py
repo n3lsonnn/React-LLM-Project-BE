@@ -33,6 +33,8 @@ def stream_answer(document_uuid: str, question: str, top_k: int) -> Generator:
     context_chunks = _retrieve_chunks(document_uuid, question, top_k)
     context = "\n\n".join(context_chunks)
 
+    yield f"data: [CITATIONS]{json.dumps(context_chunks)}\n\n"
+
     system_prompt = (
         "You are a helpful assistant that answers questions based strictly on the "
         "provided document context. If the answer is not in the context, say so clearly."
