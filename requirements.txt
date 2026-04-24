@@ -14,3 +14,6 @@ faiss-cpu
 numpy
 aiofiles
 groq
+pytest
+httpx
+ruff

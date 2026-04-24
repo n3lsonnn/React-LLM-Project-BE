@@ -55,7 +55,12 @@ def list_documents(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return db.query(Document).filter(Document.user_id == current_user.id).order_by(Document.created_at.desc()).all()
+    return (
+        db.query(Document)
+        .filter(Document.user_id == current_user.id)
+        .order_by(Document.created_at.desc())
+        .all()
+    )
 
 
 @router.get("/{document_uuid}", response_model=DocumentResponse)
