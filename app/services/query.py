@@ -4,13 +4,12 @@ from typing import Generator
 import faiss
 import numpy as np
 from groq import Groq
-from sentence_transformers import SentenceTransformer
 
 from app.core.config import settings
+from app.services.model import get_model
 
 INDEXES_DIR = "indexes"
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
 client = Groq(api_key=settings.GROQ_API_KEY)
 
 
@@ -23,7 +22,7 @@ def _load_index(document_uuid: str):
 
 def _retrieve_chunks(document_uuid: str, question: str, top_k: int) -> list[str]:
     index, chunks = _load_index(document_uuid)
-    query_embedding = model.encode([question])
+    query_embedding = get_model().encode([question])
     query_embedding = np.array(query_embedding).astype("float32")
     _, indices = index.search(query_embedding, top_k)
     return [chunks[i] for i in indices[0] if i < len(chunks)]

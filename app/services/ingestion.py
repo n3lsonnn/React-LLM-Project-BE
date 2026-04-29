@@ -4,16 +4,14 @@ import os
 import faiss
 import numpy as np
 from pypdf import PdfReader
-from sentence_transformers import SentenceTransformer
 
 from app.core.database import SessionLocal
 from app.models.document import Document
+from app.services.model import get_model
 
 INDEXES_DIR = "indexes"
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
 def _extract_text(file_path: str) -> str:
@@ -49,7 +47,7 @@ def run_ingestion(file_path: str, document_uuid: str):
         text = _extract_text(file_path)
         chunks = _chunk_text(text)
 
-        embeddings = model.encode(chunks, show_progress_bar=False)
+        embeddings = get_model().encode(chunks, batch_size=32, show_progress_bar=False)
         embeddings = np.array(embeddings).astype("float32")
 
         dimension = embeddings.shape[1]
